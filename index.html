@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="main.js"></script>
-    <style src="style.css"></style>
+    <script src="./main.js" defer></script>
     <title>Document</title>
 </head>
 <body>
-    <div class="row">
-        <button class="button" id="1">1</button>
-        <button class="button" id="2">2</button>
-        <button class="button" id="3">3</button>
-        <button class="button" id="add">+</button>
+    <div class="display">
+        <input id="input" type="text"><br>
     </div>
-    <div class="row">
-        <button class="button" id="4">4</button>
-        <button class="button" id="5">5</button>
-        <button class="button" id="6">6</button>
-        <button class="button" id="subtract">-</button>
+    <div class="calc"> 
+        <div class="input">
+            <div class="row">
+                <button id="1">1</button>
+                <button id="2">2</button>
+                <button id="3">3</button>
+                <button id="add">+</button>
+            </div>
+            <div class="row">
+                <button id="4">4</button>
+                <button id="5">5</button>
+                <button id="6">6</button>
+                <button id="subtract">-</button>
+            </div>
+            <div class="row">
+                <button id="7">7</button>
+                <button id="8">8</button>
+                <button id="9">9</button>
+                <button id="multiply">&times;</button>
+            </div>
+            <div class="row">
+                <button id="blank"></button>
+                <button id="0">0</button>
+                <button id="blank"></button>
+                <button id="divide">&divide;</button>
+            </div>
+        </div>
+        <div class="equals">
+            <button id="equals">&equals;</button> 
+        </div>
     </div>
-    <div class="row">
-        <button class="button" id="7">7</button>
-        <button class="button" id="8">8</button>
-        <button class="button" id="9">9</button>
-        <button class="button" id="multiply">&times;</button>
-    <div class="row">
-        <button class="button" id="blank"></button>
-        <button class="button" id="0">0</button>
-        <button class="button" id="blank"></button>
-        <button class="button" id="divide">&divide;;</button>
+    <div class="clear">
+        <button id="clear">CLEAR</button>
     </div>
-    
-            
 </body>
 </html>
