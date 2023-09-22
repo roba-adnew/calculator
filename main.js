@@ -7,6 +7,4 @@ function operator(a,op,b) {
     }
 }
 
-
-
 console.log(operator(20,"/",10))
