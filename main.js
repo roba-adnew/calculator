@@ -50,9 +50,6 @@ function operator(buttonPresses) {
 
                 if ( i + 1 == numOfPresses ) { 
                     newNumber += buttonPresses[ i ];
-                    buttonPresses[ i - 1 ] = newNumber;
-                    buttonPresses.splice(i,1);
-                    i -= 1;
                     return operators[buttonPresses[ i - 1 ]]
                         (parseInt(currentNumber), parseInt(newNumber))
                 }
@@ -114,8 +111,6 @@ function displayOnPress() {
                     pressRecord = [calculatedValue];
                 }   
             }
-
-            console.log(pressRecord);
         })
     );
 }
