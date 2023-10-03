@@ -1,11 +1,71 @@
-function isNumber (number) {
+function isNumber(number) {
     return number in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 }
 
-function operator(buttonPresses) {
-    // Create an object that maps the operator values to functions
-    
-    let isLastPressNumber = true;
+function userInputCleaner(buttonPresses) {
+
+    let i = 0;
+
+    while (i < buttonPresses.length) {
+        if (i == 0 && !isNumber(buttonPresses[i])) {
+
+            let validOperator = buttonPresses[i];
+            let j = i + 1;
+
+            do {
+                if (isNumber(buttonPresses[j])) {
+                    break;
+                }
+                validOperator = buttonPresses[j];
+                j++;
+            } while (!isNumber(buttonPresses[j]) && j < buttonPresses.length);
+
+            buttonPresses.splice(0, j, '0', validOperator);
+            i++;
+            continue;
+        }
+
+        if (isNumber(buttonPresses[i])) {
+            let validNumber = buttonPresses[i];
+            let j = i + 1;
+
+            while (isNumber(buttonPresses[j]) && j < buttonPresses.length) {
+                validNumber += buttonPresses[j];
+                j++;
+            }
+
+            buttonPresses.splice(i, j - i, validNumber);
+            i++;
+            continue;
+        }
+
+        if (!isNumber(buttonPresses[i])) {
+            let validOperator = buttonPresses[i];
+            let j = i + 1;
+
+            do {
+                if (isNumber(buttonPresses[j])) {
+                    break;
+                }
+                validOperator = buttonPresses[j];
+                j++;
+            } while (!isNumber(buttonPresses[j]) && j < buttonPresses.length);
+
+            buttonPresses[i] = validOperator;
+            buttonPresses.splice(i, j - i, validOperator);
+            i++;
+            continue;
+        }
+    }
+
+    if (!isNumber(buttonPresses.length - 1)) {
+        buttonPresses.splice(-1, 1);
+    }
+
+    return buttonPresses;
+}
+
+function operator(cleanedButtonPresses) {
 
     const operators = {
         "+": function(a,b) {return a + b},
@@ -14,63 +74,20 @@ function operator(buttonPresses) {
         "/": function(a,b) {return a / b}
     };
 
-    let currentNumber = "";
-    let newNumber = "";
-    let currentOperator = "";
-    let numOfPresses = buttonPresses.length;
+    while (cleanedButtonPresses.length > 1) {
+        let lastCalculated = operators[
+            cleanedButtonPresses[1]](
+                parseInt(cleanedButtonPresses[0])
+                ,parseInt(cleanedButtonPresses[2])
+        );
+        cleanedButtonPresses.splice(0, 3, lastCalculated)
+    }
 
-    for (let i = 0; i <  numOfPresses; i++) {
-        if (isLastPressNumber) {
-            
-            if (isNumber(buttonPresses[i]) && i == 0) {
-                currentNumber += buttonPresses[i];
-            }
-
-            else if ((isNumber(buttonPresses[i]) && i > 0) ) {
-                currentNumber += buttonPresses[i];
-                buttonPresses[ i - 1 ] = currentNumber;
-                buttonPresses.splice(i,1);
-                numOfPresses = buttonPresses.length;
-                i -= 1;
-            }
-
-            else if (buttonPresses[i] in operators) {
-                currentOperator = buttonPresses[i];
-                isLastPressNumber = false;
-            }
-            
-        }
-        else if (!isLastPressNumber) {
-
-            if (buttonPresses[i] in operators) {
-                currentOperator = buttonPresses[i]
-            }
-            
-            else if (isNumber( buttonPresses[ i ] )) {
-
-                if ( i + 1 == numOfPresses ) { 
-                    newNumber += buttonPresses[ i ];
-                    return operators[buttonPresses[ i - 1 ]]
-                        (parseInt(currentNumber), parseInt(newNumber))
-                }
-
-                else {
-                    if (isNumber (buttonPresses[ i + 1 ])) {
-                        newNumber += buttonPresses[ i ];
-                    }
-                    else if (buttonPresses[ i + 1 ] in operators) {
-                        currentNumber = operators[buttonPresses[ i - 1 ]]
-                            (parseInt(currentNumber), 
-                            parseInt(newNumber))
-                        isLastPressNumber = true;
-                    }
-                }
-            } 
-        }
-    } 
-
-    return currentNumber;
+    return cleanedButtonPresses[0];
 }
+
+operator(userInputCleaner(['6','3','-','6']))
+
 
 function displayOnPress() {
     // Grab the HTML elements for the display and the button
@@ -106,11 +123,12 @@ function displayOnPress() {
                     pressRecord.push(this.id);
                 }
                 else {
-                    let calculatedValue = operator(pressRecord);
+                    let cleanedValues = userInputCleaner(pressRecord);
+                    let calculatedValue = operator(cleanedValues);
                     display.value = calculatedValue;
-                    pressRecord = [calculatedValue];
+                    pressRecord = [];
                 }   
-            }
+            }   
         })
     );
 }
